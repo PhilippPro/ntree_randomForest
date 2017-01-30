@@ -3,7 +3,7 @@ library(OpenML)
 library(mlr)
 library(batchtools)
 
-dir = "/home/probst/Paper/Ntree_RandomForest/experiments"
+dir = "/home/probst/Paper/ntree_randomForest/experiments"
 source(paste0(dir,"/code/ntree_defs.R"))
 
 unlink("ntree", recursive = TRUE)

@@ -4,5 +4,5 @@ tasks = rbind(clas_small, reg_small)
 LEARNERIDS = c("randomForest")
 
 OMLDATASETS = tasks$data.id[!(tasks$task.id %in% c(1054, 1071, 1065))] # Cannot guess task.type from data! for these 3
-dir = "/home/probst/Paper/Ntree_RandomForest/experiments"
+dir = "/home/probst/Paper/ntree_randomForest/experiments"
 
