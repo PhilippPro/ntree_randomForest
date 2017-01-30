@@ -1,0 +1,104 @@
+\begin{thebibliography}{14}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Barman et~al.(2014)Barman, Saha, and Das]{Barman2014}
+Ranjan~Kumar Barman, Sudipto Saha, and Santasabuj Das.
+\newblock {Prediction of Interactions between Viral and Host Proteins Using
+  Supervised Machine Learning Methods}.
+\newblock \emph{PLOS ONE}, 9\penalty0 (11):\penalty0 1--10, 11 2014.
+\newblock \doi{10.1371/journal.pone.0112034}.
+\newblock URL \url{http://dx.doi.org/10.1371%2Fjournal.pone.0112034}.
+
+\bibitem[Breiman(2001)]{Breiman2001}
+Leo Breiman.
+\newblock {Random forests}.
+\newblock \emph{Machine Learning}, 45:\penalty0 5--32, 2001.
+
+\bibitem[Breiman et~al.(1984)Breiman, Friedman, Stone, and Olshen]{Breiman1984}
+Leo Breiman, Jerome Friedman, Charles~J Stone, and Richard~A Olshen.
+\newblock \emph{Classification and regression trees}.
+\newblock CRC press, 1984.
+
+\bibitem[Friedman(2001)]{Friedman2001}
+Jerome~H. Friedman.
+\newblock {Greedy function approximation: a gradient boosting machine}.
+\newblock \emph{Annals of Statistics}, 29\penalty0 (5):\penalty0 1189--1232,
+  2001.
+
+\bibitem[Geurts et~al.(2006)Geurts, Ernst, and Wehenkel]{Geurts2006}
+Pierre Geurts, Damien Ernst, and Louis Wehenkel.
+\newblock {Extremely randomized trees.}
+\newblock \emph{Machine Learning}, 63\penalty0 (1):\penalty0 3--42, 2006.
+\newblock URL
+  \url{http://dblp.uni-trier.de/db/journals/ml/ml63.html#GeurtsEW06;
+  http://dx.doi.org/10.1007/s10994-006-6226-1}.
+
+\bibitem[Hothorn et~al.(2006)Hothorn, Hornik, and Zeileis]{Hothorn2006}
+Torsten Hothorn, Kurt Hornik, and Achim Zeileis.
+\newblock Unbiased recursive partitioning: A conditional inference framework.
+\newblock \emph{Journal of Computational and Graphical statistics}, 15\penalty0
+  (3):\penalty0 651--674, 2006.
+
+\bibitem[Khan et~al.(2016)Khan, Gul, Perperoglou, Miftahuddin, Mahmoud, Adler,
+  and Lausen]{Khan2016}
+Zardad Khan, Asma Gul, Aris Perperoglou, Miftahuddin Miftahuddin, Osama
+  Mahmoud, Werner Adler, and Berthold Lausen.
+\newblock An ensemble of optimal trees for classification and regression
+  ({OTE}).
+\newblock \emph{Pattern Recognition}, 2016.
+
+\bibitem[Latinne et~al.(2001)Latinne, Debeir, and Decaestecker]{Latinne2001}
+Patrice Latinne, Olivier Debeir, and Christine Decaestecker.
+\newblock Limiting the number of trees in random forests.
+\newblock In \emph{International Workshop on Multiple Classifier Systems},
+  pages 178--187. Springer, 2001.
+
+\bibitem[Liaw and Wiener(2002)]{Liaw2002}
+Andy Liaw and Matthew Wiener.
+\newblock {Classification and Regression by randomForest}.
+\newblock \emph{R News}, 2\penalty0 (3):\penalty0 18--22, 2002.
+\newblock URL \url{http://CRAN.R-project.org/doc/Rnews/}.
+
+\bibitem[Oshiro et~al.(2012)Oshiro, Perez, and Baranauskas]{Oshiro2012}
+Thais~Mayumi Oshiro, Pedro~Santoro Perez, and Jos{\'e}~Augusto Baranauskas.
+\newblock {How many trees in a random forest?}
+\newblock In \emph{{International Workshop on Machine Learning and Data Mining
+  in Pattern Recognition}}, pages 154--168. Springer, 2012.
+
+\bibitem[Palla and Armano(2016)]{Palla2016}
+Piergiorgio Palla and Giuliano Armano.
+\newblock \emph{{RFmarkerDetector: Multivariate Analysis of Metabolomics Data
+  using Random Forests}}, 2016.
+\newblock URL \url{https://CRAN.R-project.org/package=RFmarkerDetector}.
+\newblock R package version 1.0.1.
+
+\bibitem[Raghu et~al.(2015)Raghu, Devarsetty, David, Lionel, and
+  Gari]{Raghu2015}
+Arvind Raghu, Praveen Devarsetty, Peiris David, Tarassenko Lionel, and Clifford
+  Gari.
+\newblock {Implications of Cardiovascular Disease Risk Assessment Using the
+  WHO/ISH Risk Prediction Charts in Rural India}.
+\newblock \emph{PLOS ONE}, 10\penalty0 (8):\penalty0 1--13, 08 2015.
+\newblock \doi{10.1371/journal.pone.0133618}.
+\newblock URL \url{http://dx.doi.org/10.1371%2Fjournal.pone.0133618}.
+
+\bibitem[Strobl et~al.(2007)Strobl, Boulesteix, Zeileis, and
+  Hothorn]{Strobl2007}
+Carolin Strobl, Anne-Laure Boulesteix, Achim Zeileis, and Torsten Hothorn.
+\newblock Bias in random forest variable importance measures: Illustrations,
+  sources and a solution.
+\newblock \emph{BMC Bioinformatics}, 8:\penalty0 25, 2007.
+
+\bibitem[Vanschoren et~al.(2013)Vanschoren, van Rijn, Bischl, and
+  Torgo]{OpenML2013}
+Joaquin Vanschoren, Jan~N. van Rijn, Bernd Bischl, and Luis Torgo.
+\newblock Openml: Networked science in machine learning.
+\newblock \emph{SIGKDD Explorations}, 15\penalty0 (2):\penalty0 49--60, 2013.
+\newblock \doi{10.1145/2641190.2641198}.
+\newblock URL \url{http://doi.acm.org/10.1145/2641190.2641198}.
+
+\end{thebibliography}
