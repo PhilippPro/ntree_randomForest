@@ -260,7 +260,7 @@ The predicted value output by tree $t$ (with $t=1,\dots,T$) is denoted as $\hat{
 \]
 In the case of classification, $\hat{y}_i$ is usually obtained by majority voting with a threshold of 0.5. For binary classification, it is equivalent to computing the same average as for regression, which now takes the form
 \[
-\hat{p}_i=\frac{1}{T}\sum_{t=1}^TI ( \hat{y}_{it}=1 )
+\hat{p}_i=\frac{1}{T}\sum_{t=1}^TI(\hat{y}_{it}=1)
 \] 
 and is denoted as $\hat{p}_i$ (standing for probability), and finally deriving $\hat{y}_i$ as
 \[
@@ -326,8 +326,8 @@ In this section we compute the expected error---according to the different measu
 %so that $p_i := E(e_{it})$. $p_i$ can be estimated through the fraction of trees that missclassify $i$ for a big number of trees $T$. The error rate for the whole dataset for a random forest with $T$ trees and the typical threshold 0.5  for observation $i$
 We first consider the classical error rate $e_i(T)$ for observation $i$ with an RF including $T$ trees and derive its expectation, conditional on the training set $D$. 
 \begin{eqnarray*}
- E(e_i(T)) & = &  E \left(I \left( \left(\frac{1}{T} \sum_{t=1}^T e_{it} \right) > 0.5 \right) \right)\\
- & = & P \left( \left(\sum_{t=1}^T e_{it} \right) > 0.5 \cdot T \right). 
+ E(e_i(T)) & = &  E(I ((\frac{1}{T} \sum_{t=1}^T e_{it} ) > 0.5))\\
+ & = & P((\sum_{t=1}^T e_{it} ) > 0.5 \cdot T). 
 \end{eqnarray*}
 We note that $e_{it}$ is a binary variable with $E(e_{it})=\varepsilon_i$ and that, the training dataset $D$ and the observation $i$ being fixed, the $e_{it}$ are mutually independent. It follows that  the sum $X_i=\sum_{t}^Te_{it}$ follows the binomial distribution $B(n, \varepsilon_i)$. 
 
@@ -366,28 +366,26 @@ and propose a reasonable convergence stop criteria that takes that into account.
 \subsection{Brier Score (binary classification) and squared error (regression)}
 We now turn to the Brier score and compute the expected Brier score contribution of observation $i$ for a RF including $T$ trees, conditional on the training set $D$. We obtain
 \begin{eqnarray*}
- E(b_i(T)) & = & E((y_i - \hat{p}_i(T) ) ^2) \\
-                    & = & E \left( \left( y_i-\frac{1}{T}\sum_{t=1}^T\hat{y}_{it} \right)^2 \right) \\
-                    & = & E \left( \left( \frac{1}{T}\sum_{t=1}^T(y_i-\hat{y}_{it}) \right)^2 \right) \\
-                    & = & E \left( \left( \frac{1}{T}\sum_{t=1}^T e_{it} \right)^2 \right)
+ E(e_i^{(b)}(T)) & = & E((y_i - \hat{p}_i(T) ) ^2) \\
+                    & = & E((y_i-\frac{1}{T}\sum_{t=1}^T\hat{y}_{it})^2) \\
+                    & = & E((\frac{1}{T}\sum_{t=1}^T(y_i-\hat{y}_{it}))^2) \\
+                    & = & E((\frac{1}{T}\sum_{t=1}^T e_{it})^2)
 \end{eqnarray*} 
 
 
 From $E(Z^2) = Var(Z)+E(Z)^2$ with $Z=\frac{1}{T}\sum_{t=1}^T e_{it}$  it follows:
 \begin{eqnarray*}
- E(b_i(T)) & = & E(e_{it})^2+\frac{Var(e_{it})}{T},
+ E(e_i^{(b)}(T)) & = & E(e_{it})^2+\frac{Var(e_{it})}{T},
 \end{eqnarray*} 
-which is obviously a strictly monotonous falling function of $T$. This also holds for the average over the observations of the test dataset. 
+which is obviously a strictly monotonous falling function of $T$. This also holds for the average over the observations of the test dataset.
 
-In the case of binary classification, we have  $e_{it}\sim\mathcal{B}(1,\varepsilon_i)$, yielding $E(e_{it})=\varepsilon_i$ and $Var(e_{it})=\varepsilon_i(1-\varepsilon_i)$, thus allowing the formulation of  $E(b_i(T))$ as $E(b_i(T))=\varepsilon_i^2+\frac{\varepsilon_i(1-\varepsilon_i)}{T}$.
-
-The calculation is also valid for the squared error in the regression case, except that in this case we would write $\hat{y}_{i}$ instead of $\hat{p}_{i}$ in the first line. 
+This calculation is also valid for the squared error in the regression case, except that in this case we would write $\hat{y}_{i}$ instead of $\hat{p}_{i}$ in the first line. Note that in the case of binary classification, we have  $e_{it}\sim\mathcal{B}(1,\varepsilon_i)$, yielding $E(e_{it})=\varepsilon_i$ and $Var(e_{it})=\varepsilon_i(1-\varepsilon_i)$, thus allowing the formulation of  $E(e_i^{(b)}(T))$ as $E(e_i^{(b)}(T))=\varepsilon_i^2+\frac{\varepsilon_i(1-\varepsilon_i)}{T}$.
 
 \subsection{Logarithmic Loss}
-As outlined in Section \ref{subsec:errormeasures}, another usual error measure based on the discrepancy between $y_i$ and $\hat{p}_i$ is the logarithmic loss $l_i(T)=-(y_i\ln (\hat{p}_i(T))+(1-y_i)\ln (1-\hat{p}_i(T)))$. 
+As outlined in Section \ref{subsec:errormeasures}, another usual error measure based on the discrepancy between $y_i$ and $\hat{p}_i$ is the logarithmic loss $e_i^{(\ell)}(T)=-(y_i\ln (\hat{p}_i(T))+(1-y_i)\ln (1-\hat{p}_i(T)))$. 
 Noticing that $\hat{p}_i(T)=1-\frac{1}{T}\sum_{t=1}^Te_{it}$ for $y_i=1$ and $\hat{p}_i(T)=\frac{1}{T}\sum_{t=1}^Te_{it}$ for $y_i=0$, it can be in both cases $y_i=0$ and $y_i=1$ reformulated as
 \[
-l_i(T) =  -\ln \left( 1-\frac{1}{T}\sum_{t=1}^T e_{it} \right).
+e_i^{(\ell)}(T) =  -\ln (1-\frac{1}{T}\sum_{t=1}^T e_{it}).
 \]
 We now use the Taylor expansion  (cite, e.g. Statistical theory with engineering applications, Hald, 1952)
 \begin{align}
@@ -405,9 +403,9 @@ f''(E(Z)) & = & \varepsilon_i^{-2},
 \end{eqnarray}
 finally yielding
 \[
-E(l_i(T)) \approx  -\ln (\varepsilon_i)+\frac{1-\varepsilon_i}{2T\varepsilon_i},
+E(e_i^{(\ell)}(T)) \approx  -\ln (\varepsilon_i)+\frac{1-\varepsilon_i}{2T\varepsilon_i},
 \]
-which is obviously a decreasing function of $T$. Taylor approximation gets better and better for increasing $T$, since the variance of $l_i(T)$ decreases with increasing $T$ and $l_i(T)$ thus tends to get closer to its expectancy. Futhermore, note that we implicitly assumed that $\varepsilon_i\neq 0$. The case $\varepsilon_i=0$ is trivial, since we then always have $l_i(T)=0$, which does not depend on $T$.
+which is obviously a decreasing function of $T$. Taylor approximation gets better and better for increasing $T$, since the variance of $e_i^{(\ell)}(T)$ decreases with increasing $T$ and $e_i^{(\ell)}(T)$ thus tends to get closer to its expectancy. Futhermore, note that we implicitly assumed that $\varepsilon_i\neq 0$. The case $\varepsilon_i=0$ is trivial, since we then always have $e_i^{(\ell)}(T)=0$, which does not depend on $T$.
 
 \subsection{Adapting the models to the OOB error}
 If there is no available test dataset, one can resort to the out-of-bag estimation technique, which uses only data from the training dataset $D$. The idea is to estimate, for each observation $i$ (for $i=1,\dots,n$) from the training dataset, the prediction error of the subforest consists of the trees for which this observation was not included in the bootstrap sample, i.e. was not used to construct the tree. Formally, the out-of-bag error is defined as
@@ -427,7 +425,7 @@ This section shows a large-scale empirical study based on 193 real datasets from
 \subsection{Study design}
 We analyse the OOB error curve of 193 datasets downloaded from the OpenML platform \citep{OpenML2013} satisfying the following criteria: the datasets have a pre-defined task in OpenML (see \citet{OpenML2013} for details on the OpenML nomenclature), they include less than 1000 observations and less than 1000 features. Cleaning procedures such as the deletion of duplicated datasets are also applied to obtain a decent collection of datasets. 
 
-For each dataset we run the RF algorithm with $T=2000$ 1000 times successively with different seeds using the R package \texttt{randomForest} \citep{Liaw2002} and extract the OOB error curve, which is automatically calculated by the package. 
+For each dataset we run the RF algorithm 1000 times successively with different seeds using the R package \texttt{randomForest} \citep{Liaw2002} and extract the OOB error curve, which is automatically calculated by the package. 
 We calculate the mean curve over the 1000 runs by simple averaging. HOW MANY TREES?
 
 \subsection{Overall results}
@@ -459,13 +457,7 @@ Automatic break criteria, convergence measure; (Question: Are more trees needed 
 
 After x trees we reach a plateau in the AUC/Brier score curves...
 
-Argue why more trees are nonetheless better: 
-\begin{itemize}
-\item Distribution of the probabilities of new observations do not necessarily have the patterns of the test (or OOB) observations. 
-More likely, if the feature provide any useful information they will be rather correctly predicted with $\epsilon_i < 0.5$ than with $\epsilon_i > 0.5$ and hence more trees should be better. 
-\item Measures like the brier score, logarithmic loss (and auc) provide more information about the predictions than the error rate.
-\end{itemize}
-
+Argue why more trees are nonetheless better...
 
 \section{Recommendations and discussion}
 \label{sec:discussion}
