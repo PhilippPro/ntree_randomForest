@@ -193,14 +193,14 @@ error (for regression); (iii) illustrating the extent of the problem through an 
 illustration, against tuning of ntree in practice or, in other words, in favor of setting ntree to the largest computationally feasible value.
 
 To set the scene, we first address this issue empirically by looking at the curve depicting out-of-bag (OOB) classification error rate (see Section \ref{sec:background} for a definition of the OOB error) for different number 
-of trees (also called OOB error curve) for various datasets. Interestingly, on most datasets we observe monotonously falling curves with growing number of trees, while other yield strange non-monotonous patterns. Two of these 
-strange error curves examples are depicted in Figure \ref{fig:2examples} as an illustration. It can be seen from these curves that the error rate initially steeply falls down and  starts growing again after a certain number 
+of trees (also called OOB error rate curve) for various datasets. Interestingly, on most datasets we observe monotonously falling curves with growing number of trees, while other yield strange non-monotonous patterns. Two of these 
+strange error rate curves examples are depicted in Figure \ref{fig:2examples} as an illustration. It can be seen from these curves that the error rate initially steeply falls down and  starts growing again after a certain number 
 of trees to finally reach a plateau. 
 
 \begin{figure}[!htb]
 \begin{center}
   \includegraphics[width=\textwidth]{initial_example.pdf}
-  \caption{Mean of OOB error curves of 1000 random forests}
+  \caption{Mean of OOB error rate curves of 1000 random forests}
    \label{fig:2examples}
 \end{center}
 \end{figure}
@@ -208,7 +208,7 @@ of trees to finally reach a plateau.
 At first view, such non-monotonous patterns are a clear argument in favor of tuning  $T$. We claim, however, that it is important to understand why and in which circumstances such patterns happen in order to decide 
 whether or not $T$ should be tuned in general. In Section \ref{sec:theory}, we address this issue from a theoretical point of view, by formulating the expected error rate as a function of the probabilities $\varepsilon_i$ 
 of correct classification by a single tree for each observation $i$ of the training dataset, for $i=1,\dots,n$ (with $n$ denoting the size of the training dataset). This theoretical view provides a clear explanation of the 
-non-monotonous error curve patterns. With a similar approach, we show that such non-monotonous patterns cannot be obtained with the Brier score or the logarithmic loss as accuracy measures which are based on probability estimations as well as with the mean squared 
+non-monotonous error rate curve patterns. With a similar approach, we show that such non-monotonous patterns cannot be obtained with the Brier score or the logarithmic loss as accuracy measures which are based on probability estimations as well as with the mean squared 
 error in the case of regression.
 
 The rest of this paper is structured as follows. Section \ref{sec:background} is a brief introduction into random forest and error estimation. Theoretical results are presented in Section \ref{sec:theory}, while the 
@@ -239,11 +239,6 @@ class that was most often predicted by the $T$ trees.
 
 
 %Another problem is the transportability of the random forest, as no convention exists on the implementation of the algorithm.
-
-%\subsection{Out-of-bag error}
-%The out-of-bag error is calculated by using the OOB estimations for the training observations. OOB estimations are calculated by predicting the class or probability for each training observation by 
-%using only the trees, for which the observation was not used. These estimations are compared to the real values by calculating some performance measure like e.g. the mean missclassification error 
-%which is the empirical counterpart of the generalization error. 
 
 %To obtain more stable results and better estimations for the generalization error we repeated this procedure 100 times and averaged them. 
 
@@ -308,17 +303,36 @@ l_i\ =\ y_i\ln(\hat{p}_i)+(1-y_i)\ln (1-\hat{p}_i).
 \]
 Both of them are based on $\hat{p}_i$ rather than $\hat{y}_i$, and can thus be only defined for the whole RF and not for single trees.
 
-\subsection{Test dataset vs. out-of-bag error}
-In the cases where a test dataset $D_{test}$ is available, prediction error is assessed by summing the chosen error measure (as described in the previous paragraph) over the $n_{test}$ observations.
-
-For example, for the classical error rate (for binary classification) and the mean squared error (for regression) are computed as
+\subsection{Test dataset error vs. out-of-bag error}
+In the cases where a test dataset $D_{test}$ is available, prediction error is assessed by averaging the chosen error measure (as described in the previous paragraph) over the $n_{test}$ observations.
+For example, the classical error rate (for binary classification) and the mean squared error (for regression) are computed as
 \[
-\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y-\hat{y}_i)^2.
+\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_i-\hat{y}_i)^2.
 \]
+
+%\subsection{Out-of-bag error}
+An alternative is the out-of-bag error which is calculated by using the out-of-bag (OOB) estimations of the training observations. OOB estimations are calculated by predicting the class, 
+the probability or the real value in case of regression for each training observation $i$ (for $i=1,\dots,n$) by using only the trees, for which the observation was not included in the bootstrap sample, i.e. was not used to construct the tree. 
+These estimations are compared to the true values by calculating some performance measure like e.g. one of the mentioned above and averaging over all training observations. 
+
+
+%Formally, the OOB estimations are defined as
+%\[
+% \hat{y}_i^{\text{OOB}} = \frac{1}{\sum_{t}^TI(i\notin B_t)}\sum_{t:\ i\notin B_t} \hat{y}_{it}.
+%\]
+%where $B_t$ denotes the set of indices of the observations that were used to construct tree $t$.
+
+%The OOB error rate is defined as
+%\[
+%OOB\ =\ \frac{1}{n}\sum_{i=1}^n \left( y_i -  \hat{y}_i^{\text{OOB}} \right)^2.
+%\]
+
 
 \section{Theoretical results}
 \label{sec:theory}
-In this section we compute the expected error---according to the different measures outlined in Section \ref{subsec:errormeasures}---of a RF consisting of $T$ trees as estimated based on the $n_{test}$ test observations, while considering the training dataset as fixed. The number $T$ of trees is considered a parameter of the RF and now mentioned in parentheses everytime we refer to the whole forest. In this section we are concerned with \textit{expected} errors, where expectation is taken over the sets of $T$ trees. Our goal is to study the monotonity of the expected errors with respect to $T$.
+In this section we compute the expected error---according to the different measures outlined in Section \ref{subsec:errormeasures}---of a RF consisting of $T$ trees as estimated based on the $n_{test}$ test observations, 
+while considering the training dataset as fixed. The number $T$ of trees is considered a parameter of the RF and now mentioned in parentheses everytime we refer to the whole forest. In this section we are concerned with 
+\textit{expected} errors, where expectation is taken over the sets of $T$ trees. Our goal is to study the monotonity of the expected errors with respect to $T$.
 
 
 \subsection{Error rate (binary classification)}
@@ -329,38 +343,41 @@ We first consider the classical error rate $e_i(T)$ for observation $i$ with an 
  E(e_i(T)) & = &  E \left(I \left( \left(\frac{1}{T} \sum_{t=1}^T e_{it} \right) > 0.5 \right) \right)\\
  & = & P \left( \left(\sum_{t=1}^T e_{it} \right) > 0.5 \cdot T \right). 
 \end{eqnarray*}
-We note that $e_{it}$ is a binary variable with $E(e_{it})=\varepsilon_i$ and that, the training dataset $D$ and the observation $i$ being fixed, the $e_{it}$ are mutually independent. It follows that  the sum $X_i=\sum_{t}^Te_{it}$ follows the binomial distribution $B(n, \varepsilon_i)$. 
+We note that $e_{it}$ is a binary variable with $E(e_{it})=\varepsilon_i$ and that, the training dataset $D$ and the observation $i$ being fixed, the $e_{it}$ are mutually independent. It follows that  the sum $X_i=\sum_{t}^Te_{it}$ 
+follows the binomial distribution $B(n, \varepsilon_i)$. 
 
 It is immediate that the contribution of observation $i$ to the classical error, $P(X_i>0.5 \cdot T)$, is an increasing function in $T$ for $\varepsilon_i > 0.5$ and a decreasing function in $T$ for $\varepsilon_i < 0.5$. 
 
-Note that in the above considerations we ignored the case where $\sum_{t=1}^T e_{it}  = 0.5 \cdot T$, which may happen in the case of an even $T$. In this case, the standard implementation in R (\texttt{randomForest}) assigns the observation randomly to a class. We choose to disregard this issue here as it will not change the results substantially (especially for large numbers of trees $T$) but would considerably complicate the formulas.  
+Note that in the above considerations we ignored the case where $\sum_{t=1}^T e_{it}  = 0.5 \cdot T$, which may happen in the case of an even $T$. In this case, the standard implementation in R (\texttt{randomForest}) assigns the observation randomly 
+to a class. We choose to disregard this issue here as it will not change the results substantially (especially for large numbers of trees $T$) but would considerably complicate the formulas.  
 
-\subsubsection{Impact on error curves}
-Error curves for one observation with the mentioned adjustment in the case of odd number of trees and for different $\varepsilon_i$ can be seen in Figure \ref{fig:errorcurves}. Very high and very low numbers of $\varepsilon_i$ lead to rapid convergence, while for $\varepsilon_i$-values close to 0.5 more trees 
-are needed to reach the plateau. 
+\subsubsection{Impact on error rate curves}
+Error rate curves are defined as the curve described by the function $e_i: T \rightarrow \mathbb{R}$.
+The expectation of the error rate curves for one observation with the mentioned adjustment in the case of odd number of trees and for different $\varepsilon_i$ can be seen in Figure \ref{fig:errorcurves}. 
+Very high and very low numbers of $\varepsilon_i$ lead to rapid convergence, while for $\varepsilon_i$-values close to 0.5 more trees are needed to reach the plateau. 
 
 \begin{figure}[!htb]
 \begin{center}
   \includegraphics[width=\textwidth]{error_curves.pdf}
-  \caption{Expected error for different $\varepsilon_i$ values}
+  \caption{Expected error rate curves for different $\varepsilon_i$ values}
   \label{fig:errorcurves}
 \end{center}
 \end{figure}
 
-The error curve obtained for a test datasets consists of the average of the error curves of the single observations. Of course, if trees are good classifiers we should have $\varepsilon_i < 0.5$ for most observations. In many cases, observations with  $\varepsilon_i > 0.5$ will be compensated by observations with $\varepsilon_i < 0.5$ in such a way that the expected error curve is monotonously decreasing. This is typically the case if there are many observations with $\varepsilon_i\approx 0$ and a few with $\varepsilon\approx 1$.
+The error rate curve obtained for a test datasets consists of the average of the error rate curves of the single observations. Of course, if trees are good classifiers we should have $\varepsilon_i < 0.5$ for most observations. 
+In many cases, observations with  $\varepsilon_i > 0.5$ will be compensated by observations with $\varepsilon_i < 0.5$ in such a way that the expected error rate curve is monotonously decreasing. 
+This is typically the case if there are many observations with $\varepsilon_i\approx 0$ and a few with $\varepsilon\approx 1$.
 
-However, if there are many observations with  $\varepsilon_i\approx 0$ and a few  observations with $\varepsilon_i \geq 0.5$ that are close to 0.5, the error curve first
+However, if there are many observations with  $\varepsilon_i\approx 0$ and a few  observations with $\varepsilon_i \geq 0.5$ that are close to 0.5, the expected error rate curve first
 falls down quickly because of the observation with $\varepsilon_i \approx 0$ and then grow again slowly as the number of trees increases because of the observations with $\varepsilon_i \geq 0.5$ close to 0.5. In Section \ref{sec:empirical}
 we show that this is the case for the two examples depicted in the introduction. 
 
-\subsubsection{Convergence speed of the error curve}
-We see that the convergence of the error curve is only dependent on the distribution of the $\varepsilon_i$ of the observations. So the convergence speed of the error curve is not directly dependent 
+\subsubsection{Convergence speed of the error rate curve}
+We see that the convergence speed of the error rate curve is only dependent on the distribution of the $\varepsilon_i$ of the observations. So the convergence speed of the error rate curve is not directly dependent 
 on the number of observations $n$ or the number of features, but these characteristics could possibly influence the distribution and hence the convergence speed.  
 
 In Section \ref{sec:empirical} we will try to look at typical distributions of the $\varepsilon_i$. We will also argue why it is better to look at Brier Score and AUC curves 
 and propose a reasonable convergence stop criteria that takes that into account.
-
-
 
 
 \subsection{Brier Score (binary classification) and squared error (regression)}
@@ -410,11 +427,6 @@ E(l_i(T)) \approx  -\ln (\varepsilon_i)+\frac{1-\varepsilon_i}{2T\varepsilon_i},
 which is obviously a decreasing function of $T$. Taylor approximation gets better and better for increasing $T$, since the variance of $l_i(T)$ decreases with increasing $T$ and $l_i(T)$ thus tends to get closer to its expectancy. Futhermore, note that we implicitly assumed that $\varepsilon_i\neq 0$. The case $\varepsilon_i=0$ is trivial, since we then always have $l_i(T)=0$, which does not depend on $T$.
 
 \subsection{Adapting the models to the OOB error}
-If there is no available test dataset, one can resort to the out-of-bag estimation technique, which uses only data from the training dataset $D$. The idea is to estimate, for each observation $i$ (for $i=1,\dots,n$) from the training dataset, the prediction error of the subforest consists of the trees for which this observation was not included in the bootstrap sample, i.e. was not used to construct the tree. Formally, the out-of-bag error is defined as
-\[
-OOB\ =\ \frac{1}{n}\sum_{i=1}^n\frac{1}{\sum_{t}^TI(i\notin B_t)}\sum_{t:\ i\notin B_t}...,
-\]
-where $B_t$ denotes the set of indices of the observations that were used to construct tree $t$.Is it really necessary to give details on OOB?
 
 If one considers the OOB error instead of the test error from an independent dataset, the formulas given in the previous subsections are not directly applicable.
 Indeed, the sums over the trees involved in the formulas should not be built over $T$ trees but only over the subset of trees for which the considered observation is out-of-bag, i.e. over $\approx\exp (-T)$ on average.
@@ -422,12 +434,17 @@ Indeed, the sums over the trees involved in the formulas should not be built ove
 \section{Empirical results}
 \label{sec:empirical}
 
-This section shows a large-scale empirical study based on 193 real datasets from a publicly available database. The goals of this study are to (i) validate our theoretical formula for the expected prediction error by comparing it to the observed prediction error; give an order of magnitude of the frequency of non-monotonous patterns in real data settings; (iii) empirically confirm our statement that observations with $\varepsilon_i$ close to 0.5 are responsible for non-monotonous patterns. 
+This section shows a large-scale empirical study based on 193 real datasets from a publicly available database. 
+The goals of this study are to (i) validate our theoretical formula for the expected prediction error by comparing it to the observed prediction error; 
+(ii) give an order of magnitude of the frequency of non-monotonous patterns in real data settings; 
+(iii) empirically confirm our statement that observations with $\varepsilon_i$ close to 0.5 are responsible for non-monotonous patterns. 
 
 \subsection{Study design}
-We analyse the OOB error curve of 193 datasets downloaded from the OpenML platform \citep{OpenML2013} satisfying the following criteria: the datasets have a pre-defined task in OpenML (see \citet{OpenML2013} for details on the OpenML nomenclature), they include less than 1000 observations and less than 1000 features. Cleaning procedures such as the deletion of duplicated datasets are also applied to obtain a decent collection of datasets. 
 
-For each dataset we run the RF algorithm with $T=2000$ 1000 times successively with different seeds using the R package \texttt{randomForest} \citep{Liaw2002} and extract the OOB error curve, which is automatically calculated by the package. 
+%For being able to calculate any measure, with the out-of-bag predictions we created the R-package \texttt{OOB-Curve}, which can calculate the 
+We analyse the OOB error rate curve of 193 datasets downloaded from the OpenML platform \citep{OpenML2013} satisfying the following criteria: the datasets have a pre-defined task in OpenML (see \citet{OpenML2013} for details on the OpenML nomenclature), they include less than 1000 observations and less than 1000 features. Cleaning procedures such as the deletion of duplicated datasets are also applied to obtain a decent collection of datasets. 
+
+For each dataset we run the RF algorithm with $T=2000$ 1000 times successively with different seeds using the R package \texttt{randomForest} \citep{Liaw2002} and extract the OOB error rate curve, which is automatically calculated by the package. 
 We calculate the mean curve over the 1000 runs by simple averaging. HOW MANY TREES?
 
 \subsection{Overall results}
@@ -439,9 +456,9 @@ It can be seen from the supplemental file (red curves), that our model fits the 
 
 
 \subsection{Datasets with non-monotonous curve}
-We now examine in more detail the datasets yielding non-monotonous patterns. In particular, the histograms of the estimates $\hat{\varepsilon}_i=|y_i-\hat{p}_i|$ of the observation-specific errors $\varepsilon_i$  are of interest, since our theoretical results indicate that their distribution is crucial to the form of the error curve. 
+We now examine in more detail the datasets yielding non-monotonous patterns. In particular, the histograms of the estimates $\hat{\varepsilon}_i=|y_i-\hat{p}_i|$ of the observation-specific errors $\varepsilon_i$  are of interest, since our theoretical results indicate that their distribution is crucial to the form of the error rate curve. 
 
-Representative examples of histograms in the case of non-monotonous error rate can be seen in Figure XXX. The histograms belong to the datasets with OpenML ID 938 and 949 for which the OOB error curve was already depicted in the introduction in Figure \ref{fig:2examples}. 
+Representative examples of histograms in the case of non-monotonous error rate can be seen in Figure XXX. The histograms belong to the datasets with OpenML ID 938 and 949 for which the OOB error rate curve was already depicted in the introduction in Figure \ref{fig:2examples}. 
 For dataset 111 we included the histogram of values that where between 0.1 and 0.9 to see the relevant probabilities. In both cases we see, that we have a bigger amount of observations, that have a probability that is a bit smaller than 0.5
 of being correctly classified than a bit bigger than 0.5 and hence concording with our theoretical results it follows that with growing number of trees these only nearly correctly classified observations will be wrongly classified and hence 
 increase the error rate when enough trees are added to the ensemble. 

@@ -18,7 +18,7 @@ plotoob = function(Tvec, pivec, adj = 1, colores) {
     for (j in 1:length(Tvec)) {
       mat[i, j] = oobi(round(Tvec[j]*adj) , pivec[i])
     }
-    legend(450, 0.95, legend = c(expression(p[i]), pivec), col = c("white", colores), lty = 1, bg = "white")
+    legend(450, 0.95, legend = c(expression(epsilon[i]), pivec), col = c("white", colores), lty = 1, bg = "white")
     lines(Tvec, mat[i, ], col = colores[i])
   }
   return(mat)
